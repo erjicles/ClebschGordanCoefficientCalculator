@@ -1,4 +1,5 @@
-﻿using Rationals;
+﻿using Radicals;
+using Rationals;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace ClebschGordanCoefficients
         public bool IsSet { get; set; } = false;
         public bool IsSeedNode { get; set; } = false;
 
-        public double rawCoefficient { get; set; } = 0.0;
-        public double normalizedCoefficient { get; set; } = 0.0;
+        public CompositeRadicalRatio rawCoefficient { get; set; } = 0;
+        public CompositeRadicalRatio normalizedCoefficient2 { get; set; } = 0;
 
         public bool IsNormalized { get; set; } = false;
 
@@ -203,15 +204,16 @@ namespace ClebschGordanCoefficients
                 //      x
                 // J+:
                 // Type 0: <m1, m2; j, m + 1> = {sqrt[(j1 - m1 + 1)(j1 + m1)]<m1 - 1, m2; j, m> + sqrt[(j2 - m2 + 1)(j2 + m2)]<m1, m2 - 1; j, m>} / sqrt[(j - m)(j + m + 1)]
-                //  =>                      c = {                  sqrt(a1) * c_m1_00           +                   sqrt(a2) * c_00_m1          } / sqrt(a0)
+                //  =>                      c = {                        a1 * c_m1_00           +                         a2 * c_00_m1          } / a0
                 m -= 1;
-                double c_m1_00 = n_m1_00 != null ? n_m1_00.rawCoefficient : 0;
-                double c_00_m1 = n_00_m1 != null ? n_00_m1.rawCoefficient : 0;
-                Rational a1 = (j1 - m1 + 1) * (j1 + m1);
-                Rational a2 = (j2 - m2 + 1) * (j2 + m2);
-                Rational a0 = (j - m) * (j + m + 1);
+                CompositeRadicalRatio c_m1_00 = n_m1_00 != null ? n_m1_00.rawCoefficient : 0;
+                CompositeRadicalRatio c_00_m1 = n_00_m1 != null ? n_00_m1.rawCoefficient : 0;
+                var a1 = new BasicRadical((j1 - m1 + 1) * (j1 + m1));
+                var a2 = new BasicRadical((j2 - m2 + 1) * (j2 + m2));
+                var a0 = new BasicRadical((j - m) * (j + m + 1));
+
                 rawCoefficient =
-                    ((Math.Sqrt((double) a1) * c_m1_00) + (Math.Sqrt((double) a2) * c_00_m1)) / Math.Sqrt((double) a0);
+                    ((a1 * c_m1_00) + (a2 * c_00_m1)) / a0;
             }
             else if (type1.Contains(calculationMethod))
             {
@@ -219,15 +221,15 @@ namespace ClebschGordanCoefficients
                 //  O   x
                 // J-:
                 // Type 1: <m1, m2; j, m - 1> = {sqrt[(j1 + m1 + 1)(j1 - m1)]<m1 + 1, m2; j, m> + sqrt[(j2 + m2 + 1)(j2 - m2)]<m1, m2 + 1; j, m>} / sqrt[(j + m)(j - m + 1)]
-                //  =>                      c = {                  sqrt(a1) * c_p1_00           +                   sqrt(a2) * c_00_p1          } / sqrt(a0)
+                //  =>                      c = {                        a1 * c_p1_00           +                         a2 * c_00_p1          } / a0
                 m += 1;
-                double c_p1_00 = n_p1_00 != null ? n_p1_00.rawCoefficient : 0;
-                double c_00_p1 = n_00_p1 != null ? n_00_p1.rawCoefficient : 0;
-                Rational a1 = (j1 + m1 + 1) * (j1 - m1);
-                Rational a2 = (j2 + m2 + 1) * (j2 - m2);
-                Rational a0 = (j + m) * (j - m + 1);
+                CompositeRadicalRatio c_p1_00 = n_p1_00 != null ? n_p1_00.rawCoefficient : 0;
+                CompositeRadicalRatio c_00_p1 = n_00_p1 != null ? n_00_p1.rawCoefficient : 0;
+                BasicRadical a1 = new BasicRadical((j1 + m1 + 1) * (j1 - m1));
+                BasicRadical a2 = new BasicRadical((j2 + m2 + 1) * (j2 - m2));
+                BasicRadical a0 = new BasicRadical((j + m) * (j - m + 1));
                 rawCoefficient =
-                    ((Math.Sqrt((double)a1) * c_p1_00) + (Math.Sqrt((double)a2) * c_00_p1)) / Math.Sqrt((double)a0);
+                    ((a1 * c_p1_00) + (a2 * c_00_p1)) / a0;
             }
             else if (type2.Contains(calculationMethod))
             {
@@ -235,17 +237,17 @@ namespace ClebschGordanCoefficients
                 //  x   x
                 // J-:
                 // Type 2: <m1, m2 + 1; j, m> = {sqrt[(j + m)(j - m + 1)]<m1, m2; j, m - 1> - sqrt[(j1 + m1 + 1)(j1 - m1)]<m1 + 1, m2; j, m>} / sqrt[(j2 + m2 + 1)(j2 - m2)]
-                //  =>                      c = {              sqrt(a1) * c_00_m1           -                   sqrt(a2) * c_p1_m1          } / sqrt(a0);
+                //  =>                      c = {                    a1 * c_00_m1           -                         a2 * c_p1_m1          } / a0
                 var M2 = m2 - 1;
                 m = m1 + M2;
                 m += 1;
-                double c_00_m1 = n_00_m1 != null ? n_00_m1.rawCoefficient : 0;
-                double c_p1_m1 = n_p1_m1 != null ? n_p1_m1.rawCoefficient : 0;
-                Rational a1 = (j + m) * (j - m + 1);
-                Rational a2 = (j1 + m1 + 1) * (j1 - m1);
-                Rational a0 = (j2 + M2 + 1) * (j2 - M2);
+                CompositeRadicalRatio c_00_m1 = n_00_m1 != null ? n_00_m1.rawCoefficient : 0;
+                CompositeRadicalRatio c_p1_m1 = n_p1_m1 != null ? n_p1_m1.rawCoefficient : 0;
+                BasicRadical a1 = new BasicRadical((j + m) * (j - m + 1));
+                BasicRadical a2 = new BasicRadical((j1 + m1 + 1) * (j1 - m1));
+                BasicRadical a0 = new BasicRadical((j2 + M2 + 1) * (j2 - M2));
                 rawCoefficient =
-                    ((Math.Sqrt((double)a1) * c_00_m1) - (Math.Sqrt((double)a2) * c_p1_m1)) / Math.Sqrt((double)a0);
+                    ((a1 * c_00_m1) - (a2 * c_p1_m1)) / a0;
             }
             else if (type3.Contains(calculationMethod))
             {
@@ -253,17 +255,17 @@ namespace ClebschGordanCoefficients
                 //  x   O
                 // J-:
                 // Type 3: <m1 + 1, m2; j, m> = {sqrt[(j + m)(j - m + 1)]<m1, m2; j, m - 1> - sqrt[(j2 + m2 + 1)(j2 - m2)]<m1, m2 + 1; j, m>} / sqrt[(j1 + m1 + 1)(j1 - m1)]
-                //          =>              c = {              sqrt(a1) * c_m1_00           -                   sqrt(a2) * c_m1_p1          } / sqrt(a0);
+                //          =>              c = {                    a1 * c_m1_00           -                         a2 * c_m1_p1          } / a0;
                 var M1 = m1 - 1;
                 m = M1 + m2;
                 m += 1;
-                double c_m1_00 = n_m1_00 != null ? n_m1_00.rawCoefficient : 0;
-                double c_m1_p1 = n_m1_p1 != null ? n_m1_p1.rawCoefficient : 0;
-                Rational a1 = (j + m) * (j - m + 1);
-                Rational a2 = (j2 + m2 + 1) * (j2 - m2);
-                Rational a0 = (j1 + M1 + 1) * (j1 - M1);
+                CompositeRadicalRatio c_m1_00 = n_m1_00 != null ? n_m1_00.rawCoefficient : 0;
+                CompositeRadicalRatio c_m1_p1 = n_m1_p1 != null ? n_m1_p1.rawCoefficient : 0;
+                BasicRadical a1 = new BasicRadical((j + m) * (j - m + 1));
+                BasicRadical a2 = new BasicRadical((j2 + m2 + 1) * (j2 - m2));
+                BasicRadical a0 = new BasicRadical((j1 + M1 + 1) * (j1 - M1));
                 rawCoefficient =
-                    ((Math.Sqrt((double)a1) * c_m1_00) - (Math.Sqrt((double)a2) * c_m1_p1)) / Math.Sqrt((double)a0);
+                    ((a1 * c_m1_00) - (a2 * c_m1_p1)) / a0;
             }
             else if (type4.Contains(calculationMethod))
             {
@@ -271,17 +273,17 @@ namespace ClebschGordanCoefficients
                 //      x
                 // J+:
                 // Type 4: <m1 - 1, m2; j, m> = {sqrt[(j - m)(j + m + 1)]<m1, m2; j, m + 1> - sqrt[(j2 - m2 + 1)(j2 + m2)]<m1, m2 - 1; j, m>} / sqrt[(j1 - m1 + 1)(j1 + m1)]
-                //  =>                      c = {              sqrt(a1) * c_p1_00           -                   sqrt(a2) * c_p1_m1          } / sqrt(a0)
+                //  =>                      c = {                    a1 * c_p1_00           -                         a2 * c_p1_m1          } / a0
                 var M1 = m1 + 1;
                 m = M1 + m2;
                 m -= 1;
-                double c_p1_00 = n_p1_00 != null ? n_p1_00.rawCoefficient : 0;
-                double c_p1_m1 = n_p1_m1 != null ? n_p1_m1.rawCoefficient : 0;
-                Rational a1 = (j - m) * (j + m + 1);
-                Rational a2 = (j2 - m2 + 1) * (j2 + m2);
-                Rational a0 = (j1 - M1 + 1) * (j1 + M1);
+                CompositeRadicalRatio c_p1_00 = n_p1_00 != null ? n_p1_00.rawCoefficient : 0;
+                CompositeRadicalRatio c_p1_m1 = n_p1_m1 != null ? n_p1_m1.rawCoefficient : 0;
+                BasicRadical a1 = new BasicRadical((j - m) * (j + m + 1));
+                BasicRadical a2 = new BasicRadical((j2 - m2 + 1) * (j2 + m2));
+                BasicRadical a0 = new BasicRadical((j1 - M1 + 1) * (j1 + M1));
                 rawCoefficient =
-                    ((Math.Sqrt((double)a1) * c_p1_00) - (Math.Sqrt((double)a2) * c_p1_m1)) / Math.Sqrt((double)a0);
+                    ((a1 * c_p1_00) - (a2 * c_p1_m1)) / a0;
             }
             else if (type5.Contains(calculationMethod))
             {
@@ -289,17 +291,17 @@ namespace ClebschGordanCoefficients
                 //      O
                 // J+:
                 // Type 5: <m1, m2 - 1; j, m> = {sqrt[(j - m)(j + m + 1)]<m1, m2; j, m + 1> - sqrt[(j1 - m1 + 1)(j1 + m1)]<m1 - 1, m2; j, m>} / sqrt[(j2 - m2 + 1)(j2 + m2)]
-                //  =>                      c = {              sqrt(a1) * c_00_p1           -                   sqrt(a2) * c_m1_p1          } / sqrt(a0)
+                //  =>                      c = {                    a1 * c_00_p1           -                         a2 * c_m1_p1          } / a0
                 var M2 = m2 + 1;
                 m = m1 + M2;
                 m -= 1;
-                double c_00_p1 = n_00_p1 != null ? n_00_p1.rawCoefficient : 0;
-                double c_m1_p1 = n_m1_p1 != null ? n_m1_p1.rawCoefficient : 0;
-                Rational a1 = (j - m) * (j + m + 1);
-                Rational a2 = (j1 - m1 + 1) * (j1 + m1);
-                Rational a0 = (j2 - M2 + 1) * (j2 + M2);
+                CompositeRadicalRatio c_00_p1 = n_00_p1 != null ? n_00_p1.rawCoefficient : 0;
+                CompositeRadicalRatio c_m1_p1 = n_m1_p1 != null ? n_m1_p1.rawCoefficient : 0;
+                BasicRadical a1 = new BasicRadical((j - m) * (j + m + 1));
+                BasicRadical a2 = new BasicRadical((j1 - m1 + 1) * (j1 + m1));
+                BasicRadical a0 = new BasicRadical((j2 - M2 + 1) * (j2 + M2));
                 rawCoefficient =
-                    ((Math.Sqrt((double)a1) * c_00_p1) - (Math.Sqrt((double)a2) * c_m1_p1)) / Math.Sqrt((double)a0);
+                    ((a1 * c_00_p1) - (a2 * c_m1_p1)) / a0;
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using Rationals;
+﻿using Radicals;
+using Rationals;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,9 +52,6 @@ namespace ClebschGordanCoefficients
         static void Main(string[] args)
         {
 
-            if ((new Rational(2, 4)) == (new Rational(3, 6)))
-                Console.WriteLine("They are the same");
-
             bool continueProgram = true;
             while (continueProgram)
             {
@@ -99,7 +97,7 @@ namespace ClebschGordanCoefficients
                     else
                         isValidInput = true;
                 }
-                
+
                 // Run the scenario
                 CBScenario scenario = new CBScenario(j1: j1, j2: j2, j: j, m: m);
                 scenario.InitializeGrid();
@@ -107,10 +105,10 @@ namespace ClebschGordanCoefficients
                     Console.Write("-----SEED NODE NOT SET-----");
                 scenario.CalculateRawCoefficients();
                 scenario.NormalizeCoefficients();
-                Utilities.DrawGrid(scenario);
+                //Utilities.DrawGrid(scenario);
 
                 var node = scenario.grid[new Tuple<Rational, Rational>(m1, m2)];
-                Console.WriteLine("Requested coefficient: " + node.normalizedCoefficient.ToString("0.0000"));
+                Console.WriteLine("Requested coefficient: " + node.normalizedCoefficient2.ToString());
 
                 Console.WriteLine("Run another scenario? (y/n)");
                 var input = Console.ReadLine();
@@ -122,9 +120,9 @@ namespace ClebschGordanCoefficients
                     continueProgram = false;
                 }
 
-                
+
             }
-            
+
         }
     }
 }

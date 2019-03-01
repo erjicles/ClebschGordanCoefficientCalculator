@@ -42,9 +42,9 @@ namespace ClebschGordanCoefficients
                                 if (scenario.grid[coord].IsSet)
                                 {
                                     if (scenario.grid[coord].IsNormalized)
-                                        coefStr = scenario.grid[coord].normalizedCoefficient.ToString("0.0000") + "(N)";
+                                        coefStr = scenario.grid[coord].normalizedCoefficient2.ToString() + "(N)";
                                     else
-                                        coefStr = scenario.grid[coord].rawCoefficient.ToString("0.0000");
+                                        coefStr = scenario.grid[coord].rawCoefficient.ToString();
                                 }
                                 Console.Write(coefStr);
                                 var diff = maxCellStr.Length - coefStr.Length;

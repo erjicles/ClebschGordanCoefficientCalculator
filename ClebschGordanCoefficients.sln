@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClebschGordanCoefficients", "ClebschGordanCoefficients\ClebschGordanCoefficients.csproj", "{24B848A9-2A56-448C-B909-DFCC49C35527}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClebschGordanCoefficients_old", "ClebschGordanCoefficients_old\ClebschGordanCoefficients_old.csproj", "{24B848A9-2A56-448C-B909-DFCC49C35527}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Radicals", "..\Radicals\Radicals\Radicals.csproj", "{C7554FA7-5667-4966-AFB4-72105BF6FCCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClebschGordanCoefficients", "ClebschGordanCoefficients\ClebschGordanCoefficients.csproj", "{1800BB85-D4E3-4A2E-94BE-EB7BC1CFEDBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{24B848A9-2A56-448C-B909-DFCC49C35527}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B848A9-2A56-448C-B909-DFCC49C35527}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B848A9-2A56-448C-B909-DFCC49C35527}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7554FA7-5667-4966-AFB4-72105BF6FCCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7554FA7-5667-4966-AFB4-72105BF6FCCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7554FA7-5667-4966-AFB4-72105BF6FCCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7554FA7-5667-4966-AFB4-72105BF6FCCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1800BB85-D4E3-4A2E-94BE-EB7BC1CFEDBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1800BB85-D4E3-4A2E-94BE-EB7BC1CFEDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1800BB85-D4E3-4A2E-94BE-EB7BC1CFEDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1800BB85-D4E3-4A2E-94BE-EB7BC1CFEDBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
