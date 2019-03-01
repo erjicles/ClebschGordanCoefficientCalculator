@@ -2,6 +2,7 @@
 using Rationals;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +19,17 @@ namespace ClebschGordanCoefficients
         public bool IsSeedNode { get; set; } = false;
 
         public CompositeRadicalRatio rawCoefficient { get; set; } = 0;
-        public CompositeRadicalRatio normalizedCoefficient2 { get; set; } = 0;
+        public CompositeRadicalRatio normalizedCoefficient { get; set; } = 0;
+        public int sign = 1;
 
-        public bool IsNormalized { get; set; } = false;
+        public NormalizationStatus status { get; set; } = NormalizationStatus.RAW;
+
+        public enum NormalizationStatus
+        {
+            RAW,
+            NORMALIZED,
+            NORM_SQUARED
+        }
 
         // References to neighbor nodes
         public CBNode n_m1_00 { get; set; }
@@ -37,6 +46,18 @@ namespace ClebschGordanCoefficients
             this.m1 = m1;
             this.m2 = m2;
             this.GridCoordinate = new Tuple<Rational, Rational>(m1, m2);
+        }
+
+        public override string ToString()
+        {
+            if (status == NormalizationStatus.RAW)
+                return rawCoefficient.ToString("R", CultureInfo.InvariantCulture) + " (Raw)";
+            else if (status == NormalizationStatus.NORMALIZED)
+                return normalizedCoefficient.ToString("R", CultureInfo.InvariantCulture);
+            else if (status == NormalizationStatus.NORM_SQUARED)
+                return (sign < 0 ? "-" : "") + "Sqrt(" + normalizedCoefficient.ToString("R", CultureInfo.InvariantCulture) + ")";
+            else
+                throw new Exception("Unknown status");
         }
 
         public bool CalculateRawCoefficient(Rational j1, Rational j2, Rational j)

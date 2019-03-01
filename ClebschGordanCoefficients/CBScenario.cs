@@ -92,9 +92,10 @@ namespace ClebschGordanCoefficients
             }
             // Set the seed node
             // Looking for a node that only has one non-null neighbor as part of a triangle
-            for (Rational m1 = -j1; m1 <= j1; m1 += 1)
+            // Start by trying the maximal m
+            for (Rational m1 = j1; m1 >= -j1; m1 -= 1)
             {
-                for (Rational m2 = -j2; m2 <= j2; m2 += 1)
+                for (Rational m2 = j2; m2 >= -j2; m2 -= 1)
                 {
                     var coord = new Tuple<Rational, Rational>(m1, m2);
                     if (grid.ContainsKey(coord))
@@ -174,8 +175,18 @@ namespace ClebschGordanCoefficients
             {
                 if (kvp.Value.m1 + kvp.Value.m2 == m)
                 {
-                    kvp.Value.normalizedCoefficient2 = (kvp.Value.rawCoefficient * kvp.Value.rawCoefficient) / total;
-                    kvp.Value.IsNormalized = true;
+                    if (total.IsRational())
+                    {
+                        var normalizer = new BasicRadical(total.ToRational());
+                        kvp.Value.normalizedCoefficient = kvp.Value.rawCoefficient / normalizer;
+                        kvp.Value.status = CBNode.NormalizationStatus.NORMALIZED;
+                    }
+                    else
+                    {
+                        kvp.Value.normalizedCoefficient = (kvp.Value.rawCoefficient * kvp.Value.rawCoefficient) / total;
+                        kvp.Value.sign = kvp.Value.rawCoefficient >= 0 ? 1 : -1;
+                        kvp.Value.status = CBNode.NormalizationStatus.NORM_SQUARED;
+                    }
                 }
             }
         }

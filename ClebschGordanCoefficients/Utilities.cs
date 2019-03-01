@@ -1,6 +1,7 @@
 ﻿using Rationals;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,14 +39,7 @@ namespace ClebschGordanCoefficients
                             }
                             else
                             {
-                                var coefStr = "";
-                                if (scenario.grid[coord].IsSet)
-                                {
-                                    if (scenario.grid[coord].IsNormalized)
-                                        coefStr = scenario.grid[coord].normalizedCoefficient2.ToString() + "(N)";
-                                    else
-                                        coefStr = scenario.grid[coord].rawCoefficient.ToString();
-                                }
+                                var coefStr = scenario.grid[coord].ToString();
                                 Console.Write(coefStr);
                                 var diff = maxCellStr.Length - coefStr.Length;
                                 Console.Write(strBldr.Clear().Append(char.Parse(" "), diff));

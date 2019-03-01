@@ -108,7 +108,7 @@ namespace ClebschGordanCoefficients
                 //Utilities.DrawGrid(scenario);
 
                 var node = scenario.grid[new Tuple<Rational, Rational>(m1, m2)];
-                Console.WriteLine("Requested coefficient: " + node.normalizedCoefficient2.ToString());
+                Console.WriteLine("Requested coefficient: " + node.ToString());
 
                 Console.WriteLine("Run another scenario? (y/n)");
                 var input = Console.ReadLine();
