@@ -2,9 +2,6 @@
 using Rationals;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClebschGordanCoefficients
 {
@@ -165,7 +162,7 @@ namespace ClebschGordanCoefficients
 
         public void NormalizeCoefficients()
         {
-            CompositeRadicalRatio total = 0;
+            RadicalSumRatio total = 0;
             foreach (KeyValuePair<Tuple<Rational, Rational>, CBNode> kvp in grid)
             {
                 if (kvp.Value.m1 + kvp.Value.m2 == m)
@@ -175,9 +172,9 @@ namespace ClebschGordanCoefficients
             {
                 if (kvp.Value.m1 + kvp.Value.m2 == m)
                 {
-                    if (total.IsRational())
+                    if (total.IsRational)
                     {
-                        var normalizer = new BasicRadical(total.ToRational());
+                        var normalizer = new Radical(total.ToRational());
                         kvp.Value.normalizedCoefficient = kvp.Value.rawCoefficient / normalizer;
                         kvp.Value.status = CBNode.NormalizationStatus.NORMALIZED;
                     }

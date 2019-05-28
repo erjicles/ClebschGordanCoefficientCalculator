@@ -1,11 +1,8 @@
 ﻿using Radicals;
 using Rationals;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClebschGordanCoefficients
 {
@@ -18,8 +15,8 @@ namespace ClebschGordanCoefficients
         public bool IsSet { get; set; } = false;
         public bool IsSeedNode { get; set; } = false;
 
-        public CompositeRadicalRatio rawCoefficient { get; set; } = 0;
-        public CompositeRadicalRatio normalizedCoefficient { get; set; } = 0;
+        public RadicalSumRatio rawCoefficient { get; set; } = 0;
+        public RadicalSumRatio normalizedCoefficient { get; set; } = 0;
         public int sign = 1;
 
         public NormalizationStatus status { get; set; } = NormalizationStatus.RAW;
@@ -227,11 +224,11 @@ namespace ClebschGordanCoefficients
                 // Type 0: <m1, m2; j, m + 1> = {sqrt[(j1 - m1 + 1)(j1 + m1)]<m1 - 1, m2; j, m> + sqrt[(j2 - m2 + 1)(j2 + m2)]<m1, m2 - 1; j, m>} / sqrt[(j - m)(j + m + 1)]
                 //  =>                      c = {                        a1 * c_m1_00           +                         a2 * c_00_m1          } / a0
                 m -= 1;
-                CompositeRadicalRatio c_m1_00 = n_m1_00 != null ? n_m1_00.rawCoefficient : 0;
-                CompositeRadicalRatio c_00_m1 = n_00_m1 != null ? n_00_m1.rawCoefficient : 0;
-                var a1 = new BasicRadical((j1 - m1 + 1) * (j1 + m1));
-                var a2 = new BasicRadical((j2 - m2 + 1) * (j2 + m2));
-                var a0 = new BasicRadical((j - m) * (j + m + 1));
+                RadicalSumRatio c_m1_00 = n_m1_00 != null ? n_m1_00.rawCoefficient : 0;
+                RadicalSumRatio c_00_m1 = n_00_m1 != null ? n_00_m1.rawCoefficient : 0;
+                var a1 = new Radical((j1 - m1 + 1) * (j1 + m1));
+                var a2 = new Radical((j2 - m2 + 1) * (j2 + m2));
+                var a0 = new Radical((j - m) * (j + m + 1));
 
                 rawCoefficient =
                     ((a1 * c_m1_00) + (a2 * c_00_m1)) / a0;
@@ -244,11 +241,11 @@ namespace ClebschGordanCoefficients
                 // Type 1: <m1, m2; j, m - 1> = {sqrt[(j1 + m1 + 1)(j1 - m1)]<m1 + 1, m2; j, m> + sqrt[(j2 + m2 + 1)(j2 - m2)]<m1, m2 + 1; j, m>} / sqrt[(j + m)(j - m + 1)]
                 //  =>                      c = {                        a1 * c_p1_00           +                         a2 * c_00_p1          } / a0
                 m += 1;
-                CompositeRadicalRatio c_p1_00 = n_p1_00 != null ? n_p1_00.rawCoefficient : 0;
-                CompositeRadicalRatio c_00_p1 = n_00_p1 != null ? n_00_p1.rawCoefficient : 0;
-                BasicRadical a1 = new BasicRadical((j1 + m1 + 1) * (j1 - m1));
-                BasicRadical a2 = new BasicRadical((j2 + m2 + 1) * (j2 - m2));
-                BasicRadical a0 = new BasicRadical((j + m) * (j - m + 1));
+                RadicalSumRatio c_p1_00 = n_p1_00 != null ? n_p1_00.rawCoefficient : 0;
+                RadicalSumRatio c_00_p1 = n_00_p1 != null ? n_00_p1.rawCoefficient : 0;
+                Radical a1 = new Radical((j1 + m1 + 1) * (j1 - m1));
+                Radical a2 = new Radical((j2 + m2 + 1) * (j2 - m2));
+                Radical a0 = new Radical((j + m) * (j - m + 1));
                 rawCoefficient =
                     ((a1 * c_p1_00) + (a2 * c_00_p1)) / a0;
             }
@@ -262,11 +259,11 @@ namespace ClebschGordanCoefficients
                 var M2 = m2 - 1;
                 m = m1 + M2;
                 m += 1;
-                CompositeRadicalRatio c_00_m1 = n_00_m1 != null ? n_00_m1.rawCoefficient : 0;
-                CompositeRadicalRatio c_p1_m1 = n_p1_m1 != null ? n_p1_m1.rawCoefficient : 0;
-                BasicRadical a1 = new BasicRadical((j + m) * (j - m + 1));
-                BasicRadical a2 = new BasicRadical((j1 + m1 + 1) * (j1 - m1));
-                BasicRadical a0 = new BasicRadical((j2 + M2 + 1) * (j2 - M2));
+                RadicalSumRatio c_00_m1 = n_00_m1 != null ? n_00_m1.rawCoefficient : 0;
+                RadicalSumRatio c_p1_m1 = n_p1_m1 != null ? n_p1_m1.rawCoefficient : 0;
+                Radical a1 = new Radical((j + m) * (j - m + 1));
+                Radical a2 = new Radical((j1 + m1 + 1) * (j1 - m1));
+                Radical a0 = new Radical((j2 + M2 + 1) * (j2 - M2));
                 rawCoefficient =
                     ((a1 * c_00_m1) - (a2 * c_p1_m1)) / a0;
             }
@@ -280,11 +277,11 @@ namespace ClebschGordanCoefficients
                 var M1 = m1 - 1;
                 m = M1 + m2;
                 m += 1;
-                CompositeRadicalRatio c_m1_00 = n_m1_00 != null ? n_m1_00.rawCoefficient : 0;
-                CompositeRadicalRatio c_m1_p1 = n_m1_p1 != null ? n_m1_p1.rawCoefficient : 0;
-                BasicRadical a1 = new BasicRadical((j + m) * (j - m + 1));
-                BasicRadical a2 = new BasicRadical((j2 + m2 + 1) * (j2 - m2));
-                BasicRadical a0 = new BasicRadical((j1 + M1 + 1) * (j1 - M1));
+                RadicalSumRatio c_m1_00 = n_m1_00 != null ? n_m1_00.rawCoefficient : 0;
+                RadicalSumRatio c_m1_p1 = n_m1_p1 != null ? n_m1_p1.rawCoefficient : 0;
+                Radical a1 = new Radical((j + m) * (j - m + 1));
+                Radical a2 = new Radical((j2 + m2 + 1) * (j2 - m2));
+                Radical a0 = new Radical((j1 + M1 + 1) * (j1 - M1));
                 rawCoefficient =
                     ((a1 * c_m1_00) - (a2 * c_m1_p1)) / a0;
             }
@@ -298,11 +295,11 @@ namespace ClebschGordanCoefficients
                 var M1 = m1 + 1;
                 m = M1 + m2;
                 m -= 1;
-                CompositeRadicalRatio c_p1_00 = n_p1_00 != null ? n_p1_00.rawCoefficient : 0;
-                CompositeRadicalRatio c_p1_m1 = n_p1_m1 != null ? n_p1_m1.rawCoefficient : 0;
-                BasicRadical a1 = new BasicRadical((j - m) * (j + m + 1));
-                BasicRadical a2 = new BasicRadical((j2 - m2 + 1) * (j2 + m2));
-                BasicRadical a0 = new BasicRadical((j1 - M1 + 1) * (j1 + M1));
+                RadicalSumRatio c_p1_00 = n_p1_00 != null ? n_p1_00.rawCoefficient : 0;
+                RadicalSumRatio c_p1_m1 = n_p1_m1 != null ? n_p1_m1.rawCoefficient : 0;
+                Radical a1 = new Radical((j - m) * (j + m + 1));
+                Radical a2 = new Radical((j2 - m2 + 1) * (j2 + m2));
+                Radical a0 = new Radical((j1 - M1 + 1) * (j1 + M1));
                 rawCoefficient =
                     ((a1 * c_p1_00) - (a2 * c_p1_m1)) / a0;
             }
@@ -316,11 +313,11 @@ namespace ClebschGordanCoefficients
                 var M2 = m2 + 1;
                 m = m1 + M2;
                 m -= 1;
-                CompositeRadicalRatio c_00_p1 = n_00_p1 != null ? n_00_p1.rawCoefficient : 0;
-                CompositeRadicalRatio c_m1_p1 = n_m1_p1 != null ? n_m1_p1.rawCoefficient : 0;
-                BasicRadical a1 = new BasicRadical((j - m) * (j + m + 1));
-                BasicRadical a2 = new BasicRadical((j1 - m1 + 1) * (j1 + m1));
-                BasicRadical a0 = new BasicRadical((j2 - M2 + 1) * (j2 + M2));
+                RadicalSumRatio c_00_p1 = n_00_p1 != null ? n_00_p1.rawCoefficient : 0;
+                RadicalSumRatio c_m1_p1 = n_m1_p1 != null ? n_m1_p1.rawCoefficient : 0;
+                Radical a1 = new Radical((j - m) * (j + m + 1));
+                Radical a2 = new Radical((j1 - m1 + 1) * (j1 + m1));
+                Radical a0 = new Radical((j2 - M2 + 1) * (j2 + M2));
                 rawCoefficient =
                     ((a1 * c_00_p1) - (a2 * c_m1_p1)) / a0;
             }

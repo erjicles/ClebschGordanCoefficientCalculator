@@ -90,7 +90,7 @@ namespace ClebschGordanCoefficients
                         Console.WriteLine("Parameters violate |m2| <= j2");
                     else if (Rational.Abs(m1 + m2) > j)
                         Console.WriteLine("Parameters violate -j <= m1 + m2 <= j");
-                    else if (j2.Denominator != m1.Denominator)
+                    else if (j1.Denominator != m1.Denominator)
                         Console.WriteLine("Parameters violate j1 and m1 must both simultaneously be integers or half integers");
                     else if (j2.Denominator != m2.Denominator)
                         Console.WriteLine("Parameters violate j2 and m2 must both simultaneously be integers or half integers");

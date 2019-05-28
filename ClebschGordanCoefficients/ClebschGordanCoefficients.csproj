@@ -6,11 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DelSquared.Radicals" Version="1.0.0-beta2" />
     <PackageReference Include="Rationals" Version="1.3.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Radicals\Radicals\Radicals.csproj" />
   </ItemGroup>
 
 </Project>
