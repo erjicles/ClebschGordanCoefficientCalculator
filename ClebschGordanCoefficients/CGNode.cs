@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace ClebschGordanCoefficients
 {
-    class CBNode
+    public class CBNode
     {
         public Rational m1 { get; set; } = 0;
         public Rational m2 { get; set; } = 0;

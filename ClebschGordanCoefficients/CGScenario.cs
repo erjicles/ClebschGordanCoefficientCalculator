@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ClebschGordanCoefficients
 {
-    class CBScenario
+    public class CBScenario
     {
         public Rational j1 { get; set; }
         public Rational j2 { get; set; }
